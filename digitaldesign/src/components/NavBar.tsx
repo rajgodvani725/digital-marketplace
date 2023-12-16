@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import MaxWidthWrapper from './MaxWidthWrapper'
+import MaxWidthWrapper from './MaxWidthWrapper' 
 import { buttonVariants } from './ui/button'
 import { Icons } from './icons'
+import NavItems from './NavItems'
 const Navbar = async () => {
 
   return (
@@ -15,8 +16,11 @@ const Navbar = async () => {
                 <Link href='/'>
                   <Icons.logo className='h-10 w-10' />
                 </Link>
-              </div>
 
+              </div>
+              <div className='hidden z-50 lg:ml-0 lg:block lg:self-stretch'>
+                <NavItems />
+              </div>
             </div>
           </div>
         </MaxWidthWrapper>
