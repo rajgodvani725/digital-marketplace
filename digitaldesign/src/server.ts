@@ -1,6 +1,6 @@
 import express from "express";
 import { getPayloadClient } from "./get-payload";
-import { nextApp, nextHandler } from "./next-utils";
+import { nextApp, NextHandler } from "./next-utils";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { appRouter } from "./trpc";
 const app = express();
@@ -9,7 +9,10 @@ const PORT = Number(process.env.PORT) || 3000;
 const createContext = ({
   req,
   res,
-}: trpcExpress.CreateExpressContextOptions) => ({ req, res });
+}: trpcExpress.CreateExpressContextOptions) => ({
+  req,
+  res,
+})
 const start = async () => {
   const payload = await getPayloadClient({
     initOptions: {
@@ -20,18 +23,19 @@ const start = async () => {
     },
   });
 
-  app.use((req, res) => nextHandler(req, res));
- 
-  nextApp.prepare().then(() => {
-    payload.logger.info("next.js started");
-  });
   app.use(
-    "/api/trpc",
+    '/api/trpc',
     trpcExpress.createExpressMiddleware({
       router: appRouter,
       createContext,
     })
-  );
+  )
+  app.use((req, res) => NextHandler(req, res))
+
+  nextApp.prepare().then(() => {
+    payload.logger.info("next.js started");
+  });
+
   app.listen(PORT, async () => {
     payload.logger.info(
       `Next.js App URL:${process.env.NEXT_PUBLIC_SERVER_URL}`
